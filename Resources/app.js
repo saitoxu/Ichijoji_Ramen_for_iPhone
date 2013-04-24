@@ -20,10 +20,43 @@ Titanium.include('./include/Database.js');
 Titanium.include('./include/Detail.js');
 // Others
 Titanium.include('./include/Others.js');
-// Splash
-Titanium.include('./include/Splash.js');
 // TopList
 Titanium.include('./include/TopList.js');
+
+// サーバーからラーメン屋の情報を受信
+var url = 'http://www8350ui.sakura.ne.jp/ramen.json';
+
+if (Titanium.Network.online != false) {
+	var xhr = Titanium.Network.createHTTPClient();
+	xhr.open('GET', url, false);
+	xhr.onload = function() {
+		var json = JSON.parse(this.responseText);
+
+		// データベースに追加
+		// 2回目以降の処理を加える
+		var db = new RamenDatabase();
+		var ramens = db.fetchToList();
+		if (ramens.length > 0) {
+			// 更新処理だけ．ラーメン屋が増えた場合には対処してません汗
+			for (var i = 0; i < ramens.length; i++) {
+				db.updateRamen(ramens[i]);
+			}
+		} else {
+			for (var i = 0; i < json.ichijoji.length; i++) {
+				db.insertRamen(json.ichijoji[i]);
+			}
+		}
+
+		Ti.API.info(db.fetchToList());
+		db.close();
+	}
+	xhr.onerror = function(error) {
+	};
+
+	xhr.send();
+} else {
+
+}
 
 // call objects
 var TopListTab = app.topList.createTab();

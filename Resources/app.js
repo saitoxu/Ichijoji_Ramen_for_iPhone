@@ -10,8 +10,6 @@ var tabGroup = Titanium.UI.createTabGroup();
 // this sets the background color of the master UIView (when there are no windows/tab groups on it)
 Titanium.UI.setBackgroundColor('#000');
 
-// Camera
-Titanium.include('./include/Camera.js');
 // Coupon
 Titanium.include('./include/Coupon.js');
 // Database
@@ -47,15 +45,16 @@ if (Titanium.Network.online != false) {
 			}
 		}
 
-		Ti.API.info(db.fetchToList());
+		// Ti.API.info(db.fetchToList());
 		db.close();
 	}
 	xhr.onerror = function(error) {
+		Ti.API.info("Ramen Loaded Error");
 	};
 
 	xhr.send();
 } else {
-
+	Ti.API.info("Ramen Network Error");
 }
 
 // call objects

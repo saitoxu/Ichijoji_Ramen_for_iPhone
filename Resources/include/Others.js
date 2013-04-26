@@ -120,6 +120,9 @@
                     alert.addEventListener('click',function(e){
                             if(e.index == 0){
                                 var db = new RamenDatabase();
+                                // データベースのフラグ消去
+                                // アプリのプロパティも消去
+                                db.close();
                             }
                     });
                     alert.show();

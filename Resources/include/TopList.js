@@ -33,9 +33,9 @@
 
 				var imageLabel = Titanium.UI.createImageView({
 					image : uri,
-					height : 51,
-					width : 51,
-					right : 7
+					height : 47,
+					width : 47,
+					right : 9
 				});
 				row.add(imageLabel);
 
@@ -47,12 +47,41 @@
 			});
 		}
 		var currentDate = new Date();
+		// Ti.API.info(currentDate);
 		// Ti.App.Properties.setString('endTime', currentDate.toString());
 		// Ti.API.info(Ti.App.Properties.getString('endTime'));
-		Ti.API.info(currentDate);
-		// setInterval(setCouponButton(), 1000);
 
-		// if (Ti.App.Properties.getString('endTime') != null) {
+		topListWin.addEventListener('focus', function() {
+			currentDate = new Date();
+			var currentDateStr = currentDate.getYear() + '/' + currentDate.getMonth() + '/' + currentDate.getDay();
+			var endTime = null;
+			var days = 9999;
+
+			if (Ti.App.Properties.getString('endTime') != null) {
+				endTime = new Date(Ti.App.Properties.getString('endTime'));
+			}
+			if (endTime != null) {
+				days = compareDate(currentDate.getYear(), currentDate.getMonth(), currentDate.getDay(), endTime.getYear(), endTime.getMonth(), endTime.getDay());
+				Ti.API.info(days);
+			}
+			if (days <= 7) {
+				topListWin.setLeftNavButton(leftButton);
+			} else {
+				topListWin.setLeftNavButton(null);
+			}
+			// Ti.API.info(currentDateStr);
+		})
+		// 日付を比較して差の日数を返す
+		function compareDate(year1, month1, day1, year2, month2, day2) {
+			var dt1 = new Date(year1, month1 - 1, day1);
+			var dt2 = new Date(year2, month2 - 1, day2);
+			var diff = dt1 - dt2;
+			var diffDay = diff / 86400000;
+			//1日は86400000ミリ秒
+			return diffDay;
+		}
+
+		// alert(compareDate(2013, 1, 1, 2012, 1, 1));
 		var leftButton = Titanium.UI.createButton({
 			title : 'クーポン'
 		});
@@ -60,8 +89,6 @@
 		leftButton.addEventListener('click', function() {
 			tab.open(couponWindow());
 		});
-		topListWin.setLeftNavButton(leftButton);
-		// }
 
 		topListWin.add(tableView);
 

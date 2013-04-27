@@ -50,7 +50,6 @@
 		// Ti.API.info(currentDate);
 		// Ti.App.Properties.setString('endTime', currentDate.toString());
 		// Ti.API.info(Ti.App.Properties.getString('endTime'));
-
 		topListWin.addEventListener('focus', function() {
 			currentDate = new Date();
 			var currentDateStr = currentDate.getYear() + '/' + currentDate.getMonth() + '/' + currentDate.getDay();
@@ -71,6 +70,7 @@
 			}
 			// Ti.API.info(currentDateStr);
 		})
+
 		// 日付を比較して差の日数を返す
 		function compareDate(year1, month1, day1, year2, month2, day2) {
 			var dt1 = new Date(year1, month1 - 1, day1);
@@ -95,7 +95,6 @@
 		var button = Titanium.UI.createButton({
 			systemButton : Titanium.UI.iPhone.SystemButton.CAMERA
 		});
-
 		// TiBarモジュールの読み込み
 		var TiBar = require('tibar');
 

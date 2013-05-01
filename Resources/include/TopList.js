@@ -37,7 +37,16 @@
 					width : 47,
 					right : 9
 				});
+				var sumiLabel = Titanium.UI.createImageView({
+					image : './images/sumi.png',
+					height : 47,
+					width : 47,
+					right : 9
+				});
 				row.add(imageLabel);
+				if (ramens[i].flag == 1) {
+					row.add(sumiLabel);
+				}
 
 				tableView.appendRow(row);
 			}
@@ -46,6 +55,7 @@
 				tab.open(detailWindow(e.row.id));
 			});
 		}
+
 		var currentDate = new Date();
 		// Ti.API.info(currentDate);
 		// Ti.App.Properties.setString('endTime', currentDate.toString());
@@ -61,16 +71,18 @@
 			}
 			if (endTime != null) {
 				days = compareDate(currentDate.getYear(), currentDate.getMonth(), currentDate.getDay(), endTime.getYear(), endTime.getMonth(), endTime.getDay());
-				Ti.API.info(days);
+				// Ti.API.info(days);
 			}
+			// クーポン開始日時と終了日時の差が7日以内だったらクーポンボタン出現
+			// デフォルトは9999日
 			if (days <= 7) {
 				topListWin.setLeftNavButton(leftButton);
 			} else {
+				Ti.API.info('hoge');
 				topListWin.setLeftNavButton(null);
 			}
 			// Ti.API.info(currentDateStr);
 		})
-
 		// 日付を比較して差の日数を返す
 		function compareDate(year1, month1, day1, year2, month2, day2) {
 			var dt1 = new Date(year1, month1 - 1, day1);
@@ -123,12 +135,15 @@
 
 				// 成功した場合の処理定義
 				success : function(data) {
-					Ti.API.info('TiBar success callback!');
+					var db = new RamenDatabase();
+					var ramens = db.fetchToList();
 					if (data && data.barcode) {
-						Ti.UI.createAlertDialog({
-							title : "Scan Result",
-							message : "Barcode: " + data.barcode + 'Symbology:' + data.symbology
-						}).show();
+						for (var i = 0; i < ramens.length; i++) {
+							if (data.barcode == ramens[i].password) {
+								alert(ramens[i].name);
+								// 訪問フラグを1にする
+							}
+						}
 					};
 				},
 				// 中止した時の処理定義
@@ -144,6 +159,7 @@
 
 		// set button
 		topListWin.setRightNavButton(button);
+		db.close();
 		return tab;
 	};
 })();

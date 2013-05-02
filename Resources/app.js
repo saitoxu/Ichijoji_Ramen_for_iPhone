@@ -1,6 +1,17 @@
 // name space
 var app = {};
 
+// アプリのID作成・登録
+if (Ti.App.Properties.getInt('appId') == null) {
+	// 0~9999までの乱数を発生させて、それをアプリのIDとする
+	var appId = Math.floor(Math.random() * 10000);
+	Ti.App.Properties.setInt('appId', appId);
+}
+alert(Ti.App.Properties.getInt('appId'));
+
+// Database
+Titanium.include('./include/Database.js');
+
 // connect database
 var con = Titanium.Database.open('ramen');
 
@@ -9,17 +20,6 @@ var tabGroup = Titanium.UI.createTabGroup();
 
 // this sets the background color of the master UIView (when there are no windows/tab groups on it)
 Titanium.UI.setBackgroundColor('#000');
-
-// Coupon
-Titanium.include('./include/Coupon.js');
-// Database
-Titanium.include('./include/Database.js');
-// Detail
-Titanium.include('./include/Detail.js');
-// Others
-Titanium.include('./include/Others.js');
-// TopList
-Titanium.include('./include/TopList.js');
 
 // サーバーからラーメン屋の情報を受信
 var url = 'http://www8350ui.sakura.ne.jp/ramen.json';
@@ -45,25 +45,70 @@ if (Titanium.Network.online != false) {
 			}
 		}
 
-		// Ti.API.info(db.fetchToList());
 		db.close();
+		// Coupon
+		Titanium.include('./include/Coupon.js');
+		// Detail
+		Titanium.include('./include/Detail.js');
+		// Others
+		Titanium.include('./include/Others.js');
+		// TopList
+		Titanium.include('./include/TopList.js');
+
+		// call objects
+		var TopListTab = app.topList.createTab();
+		var OthersTab = app.others.createTab();
+
+		// add tabs
+		tabGroup.addTab(TopListTab);
+		tabGroup.addTab(OthersTab);
+
+		// open tab group
+		tabGroup.open();
 	}
 	xhr.onerror = function(error) {
 		Ti.API.info("Ramen Loaded Error");
+		// Coupon
+		Titanium.include('./include/Coupon.js');
+		// Detail
+		Titanium.include('./include/Detail.js');
+		// Others
+		Titanium.include('./include/Others.js');
+		// TopList
+		Titanium.include('./include/TopList.js');
+
+		// call objects
+		var TopListTab = app.topList.createTab();
+		var OthersTab = app.others.createTab();
+
+		// add tabs
+		tabGroup.addTab(TopListTab);
+		tabGroup.addTab(OthersTab);
+
+		// open tab group
+		tabGroup.open();
 	};
 
 	xhr.send();
 } else {
 	Ti.API.info("Ramen Network Error");
+	// Coupon
+	Titanium.include('./include/Coupon.js');
+	// Detail
+	Titanium.include('./include/Detail.js');
+	// Others
+	Titanium.include('./include/Others.js');
+	// TopList
+	Titanium.include('./include/TopList.js');
+
+	// call objects
+	var TopListTab = app.topList.createTab();
+	var OthersTab = app.others.createTab();
+
+	// add tabs
+	tabGroup.addTab(TopListTab);
+	tabGroup.addTab(OthersTab);
+
+	// open tab group
+	tabGroup.open();
 }
-
-// call objects
-var TopListTab = app.topList.createTab();
-var OthersTab = app.others.createTab();
-
-// add tabs
-tabGroup.addTab(TopListTab);
-tabGroup.addTab(OthersTab);
-
-// open tab group
-tabGroup.open();

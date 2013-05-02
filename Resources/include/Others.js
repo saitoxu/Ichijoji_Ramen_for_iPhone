@@ -134,7 +134,7 @@
 					db.deleteFlags();
 					// プロパティ消去
 					Ti.App.Properties.setString('startTime', null);
-					Ti.App.Properties.setString('endtime', null);
+					Ti.App.Properties.setString('endTime', null);
 					db.close();
 				}
 			});

@@ -10,16 +10,6 @@ var couponWindow = function() {
 		backgroundColor : '#fff'
 	});
 
-	// ramens[i].nameとかramens[i].couponで店名とかクーポン情報取ってこれる
-	// クーポンの有効期限はアプリのプロパティにstartTimeとendTimeっていう名前で保存
-	// Ti.App.Properties.getString('startTime');
-	// Ti.App.Properties.getString('endTime');
-	// で取ってこれるけど，今は入ってないのでnullになってる
-	// Ti.App.Properties.setString('startTime', 'hogehoge');
-	// とかで適当に値セットしてテストしてください
-	// Ti.App.Properties.setString('startTime', '2013/5/1');
-	Ti.App.Properties.setString('endTime', '2013/5/9');
-
 	var header = Ti.UI.createTableViewRow({
 		height : 170,
 		selectedBackgroundColor : '#fff',
@@ -35,11 +25,9 @@ var couponWindow = function() {
 		font : {
 			fontSize : 20,
 		},
-		left : 45,
 		top : 120,
 		height : 30,
-		width : 300,
-		text : Ti.App.Properties.getString('startTime') + 'から' + Ti.App.Properties.getString('endTime') + 'まで',
+		text : Ti.App.Properties.getString('startTime') + 'から' + Ti.App.Properties.getString('endTime') + 'まで'
 	});
 	header.add(span);
 	rows.push(header);
@@ -99,4 +87,4 @@ var couponWindow = function() {
 
 	db.close();
 	return win;
-}
+};

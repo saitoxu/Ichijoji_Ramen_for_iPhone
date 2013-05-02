@@ -7,7 +7,7 @@ var RamenDatabase = function() {
 	this.close = function() {
 		this.db.close();
 	};
-	
+
 	// ラーメン屋を挿入
 	this.insertRamen = function(ramen) {
 		this.open();
@@ -30,10 +30,10 @@ var RamenDatabase = function() {
 	this.deleteFlags = function() {
 		this.open();
 		var rows = this.db.execute('SELECT * FROM ramen');
-		
+
 		while (rows.isValidRow()) {
 			_id = rows.field(1);
-			this.db.execute('UPDATE ramen SET flag = ? WHERE ramen_id = ?', 0, _id);	
+			this.db.execute('UPDATE ramen SET flag = ? WHERE ramen_id = ?', 0, _id);
 			rows.next();
 		}
 		this.close();
@@ -89,6 +89,36 @@ var RamenDatabase = function() {
 		}
 		this.close();
 		return ramens;
+	};
+
+	// 訪問済みフラグを立てる
+	// 訪問済みだった場合falseを、初めて訪れた場合はtrueを返す
+	this.setFlag = function(id) {
+		this.open();
+		var flag = this.db.execute('SELECT flag FROM ramen WHERE ramen_id = ?', id);
+		if (flag.field(0) == 1) {
+			this.close();
+			return false;
+		} else {
+			this.db.execute('UPDATE ramen SET flag = ? WHERE ramen_id = ?', 1, id);
+			this.close();
+			return true;
+		}
+	};
+
+	// 全ての店に訪問済みかどうか
+	this.isAllFlagsSet = function() {
+		this.open();
+		var rows = this.db.execute('SELECT flag FROM ramen');
+
+		while (rows.isValidRow()) {
+			if (rows.field(0) == 0) {
+				return false;
+			}
+			rows.next();
+		}
+		this.close();
+		return true;
 	};
 
 	// create table

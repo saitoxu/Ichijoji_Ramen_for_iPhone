@@ -7,7 +7,6 @@ if (Ti.App.Properties.getInt('appId') == null) {
 	var appId = Math.floor(Math.random() * 10000);
 	Ti.App.Properties.setInt('appId', appId);
 }
-alert(Ti.App.Properties.getInt('appId'));
 
 // Database
 Titanium.include('./include/Database.js');

@@ -85,7 +85,7 @@
 			currentDate = new Date();
 			var endTime = null;
 			var days = 1;
-			Ti.API.info(currentDate.toString());
+			// Ti.API.info(currentDate.toString());
 			if (Ti.App.Properties.getString('endTime') != null) {
 				endTime = new Date(Ti.App.Properties.getString('endTime') + ' 00:00:00');
 			}
@@ -159,27 +159,51 @@
 									dialog.show();
 
 									// ここでjsonをポスト
-									// var json = {};
-									// json.id = Ti.App.Properties.getInt('appId');
-									// json.name = ramens[i].name;
-									// var date = new Date();
-									// json.time = date.toString();
-									// var url = 'hoge';
-									//
-									// if (Titanium.Network.online != false) {
-									// var xhr = Titanium.Network.createHTTPClient();
-									// xhr.open('POST', url, false);
-									// xhr.onload = function() {
-									// Ti.API.info("Ramen Success");
-									// }
-									// xhr.onerror = function(error) {
-									// Ti.API.info("Ramen Loaded Error");
-									// };
-									//
-									// xhr.send();
-									// } else {
-									// Ti.API.info("Ramen Network Error");
-									// }
+									var json = {};
+									json.user_id = Ti.App.Properties.getInt('appId');
+									json.shop_id = ramens[i].ramen_id;
+									var date = new Date();
+									YYYY = date.getYear();
+									MM = date.getMonth() + 1;
+									DD = date.getDate();
+									hh = date.getHours();
+									mm = date.getMinutes();
+									ss = date.getSeconds();
+									if (YYYY < 2000) {
+										YYYY += 1900;
+									}
+									if (MM < 10) {
+										MM = "0" + MM;
+									}
+									if (DD < 10) {
+										DD = "0" + DD;
+									}
+									if (hh < 10) {
+										hh = "0" + hh;
+									}
+									if (mm < 10) {
+										mm = "0" + mm;
+									}
+									if (ss < 10) {
+										ss = "0" + ss;
+									}
+									json.time = YYYY + '/' + MM + '/' + DD + ' ' + hh + ':' + mm + ':' + ss;
+									var url = 'http://www.dl.kuis.kyoto-u.ac.jp/~takemura/mayumaro/GetUserData.py';
+
+									if (Titanium.Network.online != false) {
+										var xhr = Titanium.Network.createHTTPClient();
+										xhr.open('POST', url, false);
+										xhr.onload = function() {
+											Ti.API.info("Ramen Success");
+										}
+										xhr.onerror = function(error) {
+											Ti.API.info("Ramen Loaded Error");
+										};
+
+										xhr.send();
+									} else {
+										Ti.API.info("Ramen Network Error");
+									}
 
 									if (db.isAllFlagsSet()) {
 										// if (true) {

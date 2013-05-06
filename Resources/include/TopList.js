@@ -48,7 +48,6 @@
 					row.add(imageLabel);
 
 					// 訪問済みだったら「済」の画像を貼る
-					// Ti.API.info(ramens[i].flag);
 					if (ramens[i].flag == 1) {
 						row.add(sumiLabel);
 					}
@@ -85,14 +84,14 @@
 			currentDate = new Date();
 			var endTime = null;
 			var days = 1;
-			// Ti.API.info(currentDate.toString());
+
 			if (Ti.App.Properties.getString('endTime') != null) {
 				endTime = new Date(Ti.App.Properties.getString('endTime') + ' 00:00:00');
 			}
 			if (endTime != null) {
 				days = compareDate(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), endTime.getFullYear(), endTime.getMonth(), endTime.getDate());
 			}
-			// Ti.API.info('days = ' + days);
+
 			// クーポンの終了日時を過ぎてなかったらクーポンボタン出現
 			if (days <= 0) {
 				topListWin.setLeftNavButton(leftButton);
@@ -200,13 +199,12 @@
 											Ti.API.info("Ramen Loaded Error");
 										};
 
-										xhr.send();
+										xhr.send(json);
 									} else {
 										Ti.API.info("Ramen Network Error");
 									}
 
 									if (db.isAllFlagsSet()) {
-										// if (true) {
 										var dialog2 = Titanium.UI.createAlertDialog();
 										dialog2.setTitle('おめでとうございます！');
 										dialog2.setMessage('クーポンが発行されました！');
@@ -217,8 +215,6 @@
 										end.setDate(end.getDate() + 8);
 										Titanium.App.Properties.setString('startTime', start.getFullYear() + '/' + (start.getMonth() + 1) + '/' + start.getDate());
 										Titanium.App.Properties.setString('endTime', end.getFullYear() + '/' + (end.getMonth() + 1) + '/' + end.getDate());
-										// Ti.API.info(Ti.App.Properties.getString('startTime'));
-										// Ti.API.info(Ti.App.Properties.getString('endTime'));
 									}
 								} else {
 									var dialog = Titanium.UI.createAlertDialog();
